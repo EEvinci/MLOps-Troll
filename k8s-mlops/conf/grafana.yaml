@@ -1,0 +1,53 @@
+grafana.ini:
+  server:
+    domain: ""
+    root_url: "%(protocol)s://%(domain)s:%(http_port)s/grafana"
+    serve_from_sub_path: true
+
+ingress:
+  enabled: false
+
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      url: http://prometheus-server:80
+      access: proxy
+      isDefault: true
+
+env:
+  TZ: "Asia/Shanghai"
+
+persistence:
+  enabled: true
+  storageClassName: local-path
+  size: 2Gi
+  accessModes:
+    - ReadWriteOnce
+
+image:
+  registry: docker.m.daocloud.io
+
+initChownData:
+  image:
+    registry: docker.m.daocloud.io
+
+global:
+  imageRegistry: docker.m.daocloud.io
+
+sidecar:
+  image:
+    registry: quay.m.daocloud.io
+
+testFramework:
+  image:
+    registry: docker.m.daocloud.io
+
+downloadDashboardsImage:
+  registry: docker.m.daocloud.io
+
+imageRenderer:
+  image:
+    registry: docker.m.daocloud.io

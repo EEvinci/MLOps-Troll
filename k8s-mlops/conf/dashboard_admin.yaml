@@ -1,0 +1,25 @@
+apiVersion: v1  # 指定 Kubernetes API 版本
+kind: ServiceAccount  # 定义资源类型为 ServiceAccount
+metadata:
+  name: admin-user  # ServiceAccount 的名字，用于后续的引用
+---
+apiVersion: v1  # 指定 Kubernetes API 版本
+kind: Secret  # 定义资源类型为 Secret
+metadata:
+  name: secret-sa-sample  # Secret 的名字
+  annotations:
+    kubernetes.io/service-account.name: "admin-user"  # 关联到特定的 ServiceAccount
+type: kubernetes.io/service-account-token  # 指定 Secret 的类型为服务账户令牌
+---
+apiVersion: rbac.authorization.k8s.io/v1  # 指定 RBAC 授权 API 版本
+kind: ClusterRoleBinding  # 定义资源类型为 ClusterRoleBinding
+metadata:
+  name: admin-user  # ClusterRoleBinding 的名字
+roleRef:
+  apiGroup: rbac.authorization.k8s.io  # 引用的角色所在的 API 组
+  kind: ClusterRole  # 引用的角色类型
+  name: cluster-admin  # 引用的角色名
+subjects:
+  - kind: ServiceAccount  # 主体类型
+    name: admin-user  # 与 ClusterRole 绑定的 ServiceAccount 名称
+    namespace: default  # ServiceAccount 所在的命名空间

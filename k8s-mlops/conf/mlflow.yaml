@@ -1,0 +1,61 @@
+tracking:
+  enabled: true
+  replicaCount: 1
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ingress:
+    enabled: false
+  persistence:
+    enabled: true
+    mountPath: /bitnami/mlflow
+    accessModes: [ReadWriteOnce]
+    size: 20Gi
+    existingClaim: ""
+  auth:
+    enabled: true
+    existingSecret: mlflow-secret
+    existingSecretUserKey: db-user
+    existingSecretPasswordKey: db-password
+  metrics:
+    enabled: true
+    
+run:
+  enabled: false
+
+postgresql:
+  enabled: false
+
+minio:
+  enabled: false
+
+externalDatabase:
+  host: postgresql
+  port: 5432
+  user: bn_mlflow
+  database: bn_mlflow
+  authDatabase: bn_mlflow_auth
+  existingSecret: pgsql-secret
+  existingSecretUserKey: postgresql-username
+  existingSecretPasswordKey: postgresql-password
+
+  global:
+  imageRegistry: docker.m.daocloud.io
+
+image:
+  registry: docker.m.daocloud.io
+
+gitImage:
+  registry: docker.m.daocloud.io
+
+volumePermissions:
+  image:
+    registry: docker.m.daocloud.io
+
+waitContainer:
+  image:
+    registry: docker.m.daocloud.io

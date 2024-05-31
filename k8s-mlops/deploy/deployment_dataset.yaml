@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dataset
+spec:
+  selector:
+    matchLabels:
+      app: python-app
+  template:
+    metadata:
+      labels:
+        app: python-app
+    spec:
+      imagePullSecrets:
+        - name: my-docker-credentials
+      containers:
+      - name: python-app
+        image: docker.m.daocloud.io/eevinci/mlops:latest
+        imagePullPolicy: Always
+        command: ["python3", "-m", "src.dataset"]
+        env:
+        - name: DATABASE_URL
+          value: "postgresql://bn_mlflow:bn_mlflow@postgresql/bn_mlflow"
+        - name: TRACKING_URL
+          value: "http://mlflow-tracking"
+        - name: MLFLOW_TRACKING_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mlflow-secret
+              key: db-user
+        - name: MLFLOW_TRACKING_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mlflow-secret
+              key: db-password
+        - name: MODEL_NAME
+          value: "bert"
+        - name: EXPERIMENT_NAME
+          value: training

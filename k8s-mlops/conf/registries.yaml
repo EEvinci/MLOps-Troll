@@ -1,0 +1,41 @@
+# mirrors 部分指定了多个中国大陆镜像源
+mirrors:
+  "docker.io":
+    endpoint:
+      - "docker.mirrors.ustc.edu.cn"
+  
+  "gcr.io":
+    endpoint:
+      - "gcr.nju.edu.cn"
+  
+  "ghcr.io":
+    endpoint:
+      - "ghcr.m.daocloud.io"
+
+  "k8s.gcr.io":
+    endpoint:
+      - "k8s-gcr.m.daocloud.io"
+
+  "mcr.microsoft.com":
+    endpoint:
+      - "mcr.m.daocloud.io"
+
+  "nvcr.io":
+    endpoint:
+      - "nvcr.m.daocloud.io"
+
+  "quay.io":
+    endpoint:
+      - "quay.m.daocloud.io"
+
+  "registry.jujucharms.com":
+    endpoint:
+      - "jujucharms.m.daocloud.io"
+
+  "rocks.canonical.com":
+    endpoint:
+      - "rocks-canonical.m.daocloud.io"
+
+  "registry.k8s.io":
+    endpoint:
+      - "k8s.mirror.nju.edu.cn"

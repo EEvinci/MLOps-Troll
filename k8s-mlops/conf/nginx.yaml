@@ -1,0 +1,16 @@
+controller:
+  image:
+    registry: k8s.m.daocloud.io  # 指定 NGINX 控制器使用的镜像注册中心
+
+admissionWebhooks:
+  patch:
+    image:
+      registry: k8s.m.daocloud.io  # 指定 Admission Webhooks patch 操作使用的镜像注册中心
+
+opentelemetry:
+  image:
+    registry: k8s.m.daocloud.io  # 指定用于 OpenTelemetry 集成的镜像注册中心
+
+defaultBackend:
+  image:
+    registry: k8s.m.daocloud.io  # 指定默认后端服务使用的镜像注册中心

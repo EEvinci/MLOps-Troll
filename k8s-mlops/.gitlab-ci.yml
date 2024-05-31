@@ -1,0 +1,33 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  IMAGE_TAG: eevinci/mlops:latest
+
+build_image:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - echo $CI_REGISTRY_PASSWORD | docker login --username $CI_REGISTRY_USER --password-stdin
+    - docker build --cache-from $IMAGE_TAG -t $IMAGE_TAG .
+    - docker push $IMAGE_TAG
+  only:
+    - master
+    - main
+
+deploy_dataset:
+  image: alpine/k8s:1.26.14
+  stage: deploy
+  script:
+    - echo "Deploying to Kubernetes..."
+    - kubectl config set-cluster k8s --server=https://${K8S_SERVER}:6443 --insecure-skip-tls-verify=true
+    - kubectl config set-credentials gitlab-ci --token=$K8S_CI_TOKEN
+    - kubectl config set-context gitlab-ci --cluster=k8s --namespace=default --user=gitlab-ci
+    - kubectl config use-context gitlab-ci
+    - kubectl set image deployment/dataset python-app=docker.m.daocloud.io/$IMAGE_TAG --record
+  only:
+    - master
+    - main

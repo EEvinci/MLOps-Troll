@@ -1,0 +1,37 @@
+image:
+  registry: k8s.m.daocloud.io  # 指定 Prometheus 使用的镜像注册中心
+
+alertmanager:
+  enabled: false  # 禁用 Prometheus 的 alertmanager 组件
+
+ingress:
+  enabled: false  # 禁用 Kubernetes ingress，如果不需要外部访问 Prometheus，则无需启用
+
+env:
+  TZ: "Asia/Shanghai"  # 设置 Prometheus 服务的时区
+
+server:
+  image:
+    repository: quay.m.daocloud.io/prometheus/prometheus  # 指定 Prometheus 服务器的容器镜像仓库
+  service:
+    enabled: true  # 启用 Prometheus 服务
+    retention: 30d  # 数据保留期限设置为 30 天
+  prometheus.yml:
+    scrape_configs:  # 定义 Prometheus 抓取配置
+
+      - job_name: k8s-kube-state-metrics-YourDefinedK8sClusterName  # 抓取任务名称
+      
+        honor_timestamps: true  # 是否尊重抓取目标的时间戳
+        metrics_path: /metrics  # 抓取的指标路径
+        scheme: http  # 使用 HTTP 协议
+        static_configs:  # 静态配置
+          - targets: ['IP:PORT']  # 定义抓取目标
+        metric_relabel_configs:  # 指标重新标签配置
+        - target_label: cluster  # 目标标签
+
+          replacement: YourDefinedK8sClusterName  # 替换为集群名称
+
+configmapReload:
+  prometheus:
+    image: 
+      repository: quay.m.daocloud.io/prometheus-operator/prometheus-config-reloader  # 配置重载时使用的镜像
